@@ -1,0 +1,51 @@
+﻿@page
+@model ContractMonthlyClaimsSystems.Pages.Claims.NewClaimModel
+@{
+}
+<br>
+<h2>New Claim</h2>
+
+
+<form method="post">
+    
+       <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">HoursWorked</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="HoursWorked" value="@Model.ClaimsInfo.HoursWorked">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">HourlyRate</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="HourlyRate" value="@Model.ClaimsInfo.HourlyRate">
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Notes</label>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" name="Notes" value="@Model.ClaimsInfo.notes">
+        </div>
+    </div>
+    
+    <div class="row mb-3">
+        <label class="col-sm-3 col-form-label">Supporting Documents</label>
+        <div class="col-sm-6">
+            <input type="file" class="form-control" name="supportingDocuments" id="supportingDocuments" accept=".pdf, .docx, .xlsx" required>
+            <small class="form-text text-muted">Allowed formats: .pdf, .docx, .xlsx. Max size: 5MB.</small>
+            <button type="Upload" class="btn btn-primary">Upload</button>
+        </div>
+    </div>
+    }
+
+       
+        
+        <div class="row mb-3">
+        <div class="offset-sm-3 col-sm-3 d-grid>
+<button type="SubmitClaim" class="btn btn-primary">SubmitClaim</button>
+    <div class="col-sm-3 d-grid">
+        <a class="btn-outline-orimery"href="/" role="button">Cancel</a>
+    </div>
+</div> 
+</form>
+
+

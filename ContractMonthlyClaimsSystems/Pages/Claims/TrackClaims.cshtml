@@ -1,0 +1,72 @@
+﻿@page
+@model ContractMonthlyClaimsSystems.Pages.Claims.TrackClaimsModel
+@{
+    }
+<h2>Track Claims</h2>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success">@Model.SuccessMessage</div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Hours Worked</th>
+            <th>Hourly Rate</th>
+            <th>Notes</th>
+            <th>Supporting Documents</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var claim in Model.Claims)
+        {
+            <tr>
+                <td>@claim.Id</td>
+                <td>@claim.HoursWorked</td>
+                <td>@claim.HourlyRate</td>
+                <td>@claim.Notes</td>
+                <td>@claim.SupportingDocuments</td>
+                <td>
+                    <span class="badge @(claim.Status == "Approved" ? "bg-success" : 
+                                         claim.Status == "Rejected" ? "bg-danger" : 
+                                         "bg-warning")">
+                        @claim.Status
+                    </span>
+                </td>
+                <td>
+                    <form method="post">
+                        <input type="hidden" name="id" value="@claim.Id" />
+                        <select name="status" class="form-select" required>
+                            <option value="" disabled>Select Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Approved">Approve</option>
+                            <option value="Rejected">Reject</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+       
+        
+   
+
+
+
+
+    

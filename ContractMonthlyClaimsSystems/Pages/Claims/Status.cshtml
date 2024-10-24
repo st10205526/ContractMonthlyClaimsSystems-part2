@@ -1,0 +1,110 @@
+﻿@page
+@model ContractMonthlyClaimsSystems.Pages.Claims.StatusCheckModel
+@{
+}
+
+
+<h2>Check Claim Status</h2>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success">@Model.SuccessMessage</div>
+}
+
+@if (Model.ClaimsList.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Notes</th>
+                <th>Supporting Documents</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+           @foreach(var claim in Model.ClaimsList)
+            {
+                <tr>
+                    <td>@claim.HoursWorked</td>
+                    <td>@claim.HourlyRate</td>
+                    
+                    <td>
+                        @if (!string.IsNullOrEmpty(claim.SupportingDocuments))
+                        {
+                            <a href="@Url.Content("~/uploads/" + claim.SupportingDocuments)" target="_blank">Download</a>
+                        }
+                        else
+                        {
+                            <span>No Document</span>
+                        }
+                    </td>
+                    <td>
+                        <span class="badge 
+                            @(claim.Status == "Approved" ? "badge-success" : 
+                              claim.Status == "Rejected" ? "badge-danger" : 
+                              "badge-warning")">
+                            @claim.Status
+                        </span>
+                    </td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div>No claims found.</div>
+}
+
+@section Scripts {
+    <script src="~/lib/signalr/signalr.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/claimHub")
+            .build();
+
+        connection.on("ReceiveClaimUpdate", function(updatedClaim) {
+            // Updating the status in the table in real-time
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                const claimId = row.cells[0].textContent; 
+                if (claimId == updatedClaim.id) {
+                    row.cells[4].innerHTML = `<span class="badge ${updatedClaim.status === 'Approved' ? 'badge-success' : updatedClaim.status === 'Rejected' ? 'badge-danger' : 'badge-warning'}">${updatedClaim.status}</span>`;
+                }
+            });
+        });
+
+        connection.start().catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        function updateStatus(claimId, status) {
+            fetch('/Claims/StatusCheck?handler=UpdateStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ claimId: claimId, status: status })
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    console.log('Status updated successfully');
+                } else {
+                    console.error('Error updating status:', data.message);
+                }
+            }).catch(err => console.error('Fetch error:', err));
+        }
+    </script>
+}
+
+
+
+

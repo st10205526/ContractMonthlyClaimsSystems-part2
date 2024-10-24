@@ -1,0 +1,43 @@
+﻿@page
+@model ContractMonthlyClaimsSystems.Pages.Claims.ClaimsModel
+@{
+}
+<br>
+<h2>Claim Submission</h2>
+<a class='btn btn-primary btn-sm' href='/Claims/Create'>NewClaim</a>
+
+<table class="table">
+    <thead>
+        <tr>
+<th>Id</th>
+            <th>Name</th>
+            <th>HoursWorked</th>
+            <th>HourlyRate</th>
+            <th>Notes</th>
+            <th>SupportingDocuments</th>
+        </tr>
+        
+    </thead>
+    <tbody>
+        @foreach(var item in Model.ListClaims)
+        {
+          <tr>
+              <td>@item.id</td>
+                <td>@item.HoursWorked</td>
+                <td>@item.HourlyRate</td>
+                <td>@item.notes</td>
+                <td>@item.SupportingDocuments</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="/claims/Edit?Id=@item.id">Edit</a>
+                    <a class="btn btn-primary btn-sm" href="/claims/Delete?Id=@item.id">Delete</a>
+                    
+                </td>
+
+
+
+          </tr>  
+        }
+    </tbody>
+</table>
+
+

@@ -1,0 +1,65 @@
+﻿@page
+@model ContractMonthlyClaimsSystems.Pages.Claims.CoordinatorsModel
+@{
+}
+
+<h2>Pending Claims</h2>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <div class="alert alert-danger">@Model.ErrorMessage</div>
+}
+
+@if (!string.IsNullOrEmpty(Model.SuccessMessage))
+{
+    <div class="alert alert-success">@Model.SuccessMessage</div>
+}
+
+@if (Model.PendingClaims.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Notes</th>
+                <th>Supporting Documents</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model.PendingClaims)
+            {
+                <tr>
+                    <td>@claim.HoursWorked</td>
+                    <td>@claim.HourlyRate</td>
+                    
+                    <td>
+                        @if (!string.IsNullOrEmpty(claim.SupportingDocuments))
+                        {
+                            <a href="@Url.Content("~/uploads/" + claim.SupportingDocuments)" target="_blank">Download</a>
+                        }
+                        else
+                        {
+                            <span>No Document</span>
+                        }
+                    </td>
+                    <td>@claim.Status</td>
+                    <td>
+                        <form method="post">
+                            
+                            <button type="submit" name="status" value="Approved" class="btn btn-success btn-sm">Approve</button>
+                            <button type="submit" name="status" value="Rejected" class="btn btn-danger btn-sm">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div>No pending claims found.</div>
+}
+
